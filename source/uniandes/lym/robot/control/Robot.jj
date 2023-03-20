@@ -1261,6 +1261,4 @@ TOKEN: //Tipos de datos
 			}
 			return total;
 		}
-	}
-
-	
+	}	
