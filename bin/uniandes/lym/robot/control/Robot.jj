@@ -33,11 +33,15 @@ import java.util.Vector;
 import java.util.LinkedList;
 import java.util.*;
 
+
 @SuppressWarnings("serial")
+
+
 public class Robot 
 {
 
 	ArrayList<String> listaVariables = new ArrayList<String>();
+	
 	Map<String, Integer> mapaVariables = new HashMap<String, Integer >();
 
 	boolean ejecutar = false;
@@ -49,7 +53,7 @@ public class Robot
 		world = (RobotWorldDec) w;	
 	}
 
-	String salida=new String();
+	String salida="";
 }
 PARSER_END(Robot)
 
@@ -194,7 +198,101 @@ TOKEN: //Tipos de datos
 	  }
 	
 	{
-	  //-------------------assignTo-----------------------
+	  assignTo() // < ASSIGNTO > ":" num = num() "," name = < NAME >
+	   
+	| goTo() // < GOTO > ":" (xInt = num()| xVar = < NAME >) "," (yInt = num()| yVar = < NAME >)
+
+	| move() // < MOVE > ":" (num = num()| name = < NAME >)
+
+	| turn()  //< TURN > ":" (name = < LEFT >| name = < RIGHT >| name = < AROUND >)
+	
+	| face() //< FACE > ":" ( name = < NORTH >| name = < SOUTH >| name = < EAST >| name = < WEST >)
+
+	| putN() //< PUT > ":" (num = num()|name = < NAME >) "," (< BALLOONS >|< CHIPS >)
+
+	| pickN() // < PICK > ":" (num = num()|name = < NAME >) "," (< BALLOONS >|< CHIPS >)
+
+	| moveToThe()  // < MOVETOTHE > ":" (num = num()|name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
+
+	| moveInDir() // < MOVEINDIR > ":" (num = num()|name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+
+	| jumpToThe() //< JUMPTOTHE > ":" (num = num()|name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
+
+	| jumpInDir() // < JUMPINDIR > ":" (num = num()|name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+
+	| < NOP > ":"
+	}
+
+	boolean conditions():    //----> Falta probar que las condiciones funcionen
+	{
+	  Token name = new Token();
+		int num = 0;
+		boolean bool;
+	  }
+	{
+	  bool = facing() // < FACING > ":" (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+	| bool = canPut() // < CANPUT > ":" num() "," (< BALLOONS >|< CHIPS >)
+	| bool = canPick() // < CANPICK > ":" (num = num()| name = < NAME >) "," (< BALLOONS >|< CHIPS >)
+	| bool = canMoveInDir() // < CANMOVEINDIR > ":" (num = num()| name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+	| bool = canJumpInDir() // < CANJUMPINDIR > ":" (num = num()| name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+	| bool = canMoveToThe() // < CANMOVETOTHE > ":" (num = num()| name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
+	| bool = canJumpToThe() // < CANJUMPTOTHE > ":" (num = num()| name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
+	| bool = conditionNot() //< NOT > ":" (conditions())    ---> No se si funciona asi
+
+	{return bool;}
+	}
+
+	boolean conditionNot():
+	{
+	  boolean cond;
+	}
+
+	{
+	  < NOT > ":" cond = conditions()
+	  {
+	  if(ejecutar == true) {
+
+	    if(cond == true) {
+	      return false;
+	    } else {
+	      return true;
+	    }
+	  }
+	}
+	
+	}
+
+
+// ----------------------------METODOS DE COMANDOS----------------------------
+
+	void put() :
+	{
+		int f=1;	
+	}
+	{
+		( <CHIPS>    "," f=num() {world.putChips(f); salida = "Command:  Put Chips"; })
+		|  	  ( <BALLOONS>   "," f=num() {world.putBalloons(f); salida = "Command:  Put Balloons";})	 
+
+	}
+	
+
+	void get() :
+	{
+		int f=1;	
+	}
+	{
+		( <CHIPS>   "," f=num() {world.pickChips(f);salida = "Command:  Pick chips";})
+		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
+	}
+
+	
+
+	void assignTo():
+	{
+	  Token name = new Token();
+		int num = 0;
+	}
+	{
 	  < ASSIGNTO > ":" num = num() "," name = < NAME >
 	  
 	  {
@@ -204,15 +302,27 @@ TOKEN: //Tipos de datos
 	    } else {
 	      throw new Error("La variable '"+name.image+"' debe ser declarada antes de usarse.");
 	    }
-	    
 	    }
-	    
+
+	    salida += "Command: ASSIGNTO: " + num + "," + name + "\n";
 	   }
 	   
-	 //---------------------goTo--------------------------
-	| < GOTO > ":" (xInt = num()| xVar = < NAME >) "," (yInt = num()| yVar = < NAME >)
-	
+	}
+
+
+
+	void goTo():
 	{
+		int xInt = -1;
+		int yInt = -1;
+		Token xVar = new Token();
+		Token yVar = new Token();
+	 }
+
+	 {
+	   < GOTO > ":" (xInt = num()| xVar = < NAME >) "," (yInt = num()| yVar = < NAME >)
+
+	   {
 	  if(ejecutar == true) {
 	    if(xVar.image != null && mapaVariables.containsKey(xVar.image)) {
 		  xInt = mapaVariables.get(xVar.image);
@@ -231,14 +341,25 @@ TOKEN: //Tipos de datos
 		} catch(Exception e) {
 		  System.out.println(e);
 		}
-	  }
-		
-		
+
+		salida += "Command: GOTO(" + xInt + "," + yInt + ")";
+	  }	
+	}
+	   
+	 }
+
+
+
+	 void move():
+	 {
+		Token name = new Token();
+		int num = 0;
 	}
 
-	//---------------------Move----------------------------
-	| < MOVE > ":" (num = num()| name = < NAME >)
 	{
+	  < MOVE > ":" (num = num()| name = < NAME >)
+
+	  {
 	  if (ejecutar == true) {
 	    if(name.image != null && mapaVariables.containsKey(name.image)) {
 		  num = mapaVariables.get(name.image);
@@ -249,83 +370,23 @@ TOKEN: //Tipos de datos
 		world.moveForward(num, false);
 		
 	    }
+
+	    salida += "Command: MOVE(" + num + "\n";
 	  
 	}
 
-	//--------------------------TURN--------------------------------
-	| turn()  //< TURN > ":" (name = < LEFT >| name = < RIGHT >| name = < AROUND >)
-
-	// Falta saber que hace Around
-
-	
-	//---------------------------FACE---------------------------------
-	| < FACE > ":" ( name = < NORTH >| name = < SOUTH >| name = < EAST >| name = < WEST >)
-
+	}
 
 	
 
-	| < PUT > ":" (num = num()|name = < NAME >) "," (< BALLOONS >|< CHIPS >)
-
-	| < PICK > ":" (num = num()|name = < NAME >) "," (< BALLOONS >|< CHIPS >)
-
-	| < MOVETOTHE > ":" (num = num()|name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
-
-	| < MOVEINDIR > ":" (num = num()|name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-
-	| < JUMPTOTHE > ":" (num = num()|name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
-
-	| < JUMPINDIR > ":" (num = num()|name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-
-	| < NOP > ":"
-	}
-
-	void conditions():
-	{}
-	{
-	  < FACING > ":" < NORTH >|< SOUTH >|< EAST >|< WEST >
-	| < CANPUT > ":" num() "," (< BALLOONS >|< CHIPS >)
-	| < CANPICK > ":" num() "," (< BALLOONS >|< CHIPS >)
-	| < CANMOVEINDIR > ":" num() "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-	| < CANJUMPINDIR > ":" num() "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-	| < CANMOVETOTHE > ":" num() "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
-	| < CANJUMPTOTHE > ":" num() "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
-//	| < NOT > ":" (conditions()) Se debe corregir... no se puede llamar la funcion conditions dentro de si misma
-	}
-
-
-	void put() :
-	{
-		int f=1;	
-	}
-	{
-		( <CHIPS>    "," f=num() {world.putChips(f); salida = "Command:  Put Chips"; })
-		|  	  ( <BALLOONS>   "," f=num() {world.putBalloons(f); salida = "Command:  Put Balloons";})	 
-
-	}
-
-	void get() :
-	{
-		int f=1;	
-	}
-	{
-		( <CHIPS>   "," f=num() {world.pickChips(f);salida = "Command:  Pick chips";})
-		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
-	}
-	
-
+	/* La funcion Turn hace que el robot gire 90° en direccion LEFT, RIGHT
+	o que gire 180° (AROUND) */
 	void turn():
 	{
 	  Token name = new Token();
 	}
 	{
 	  < TURN > ":" (name = < LEFT >| name = < RIGHT >| name = < AROUND >)
-
-	// Falta saber que hace Around
-
-	  /*	public static final int NORTH = 0;
-	public static final int SOUTH = 1;
-	public static final int EAST = 2;
-	public static final int WEST = 3; */
 
 	{
 		if(ejecutar == true) {
@@ -334,42 +395,763 @@ TOKEN: //Tipos de datos
 
 
 		  if((name.image).toUpperCase().equals("LEFT")) {
-		    if(facing == 0) {
-		      world.turnRight();
-		      world.turnRight();
-		      world.turnRight();
-		    } else if(facing == 1) {
-		      world.turnRight();
-		    } else if(facing == 2) {
-		      world.turnRight();
-		    }
+		    world.turnRight();
+		    world.turnRight();
+		    world.turnRight();
+
 
 		  } else if((name.image).toUpperCase().equals("RIGHT")) {
-		    if(facing == 0) {
-		      world.turnRight();
-		    } else if(facing == 1) {
-		      world.turnRight();
-		      world.turnRight();
-		      world.turnRight();
-		    } else if(facing == 3) {
-		      world.turnRight();
-		      world.turnRight();
-		    }
+		    world.turnRight();
+
 		  
-		} /*else if((name.image).toUpperCase().equals("AROUND")) {
-		  Falta saber que es around
-		}*/
+		} else if((name.image).toUpperCase().equals("AROUND")) {
+		  world.turnRight();
+		  world.turnRight();
+		}
+
+		salida += "Command: TURN " + (name.image).toUpperCase() + "\n";
 	}
 
 	}
-
-	
 	  
 	}
 
 
 
-// Producciones
+	void turnTo(Token name):
+	{
+	}
+	
+	{
+	  {
+
+	  String fullName = "";
+
+	  Map<String, Integer> mapDir = new HashMap<String, Integer >();
+
+	  mapDir.put("NORTHEAST", 1); mapDir.put("NORTHSOUTH", 2); mapDir.put("NORTHWEST", 3);
+	  
+	  mapDir.put("EASTSOUTH", 1); mapDir.put("EASTWEST", 2); mapDir.put("EASTNORTH", 3);
+	  
+	  mapDir.put("SOUTHWEST", 1); mapDir.put("SOUTHNORTH", 2); mapDir.put("SOUTHEAST", 3);
+	  
+	  mapDir.put("WESTNORTH", 1); mapDir.put("WESTEAST", 2); mapDir.put("WESTSOUTH", 3);
+
+	  if(ejecutar == true) {
+
+	      int facing = world.getFacing();
+
+	      if (facing == 0) fullName += "NORTH";
+	      else if (facing == 1) fullName += "SOUTH";
+	      else if (facing == 2) fullName += "EAST";
+	      else if (facing == 3) fullName += "WEST";
+	      
+
+	      if(!fullName.equals((name.image).toUpperCase())) {
+	        
+	        fullName += (name.image).toUpperCase();
+
+		      int timesToRepeat = mapDir.get(fullName);
+		      int i = 0;
+	
+		      while(i < timesToRepeat) {
+		        world.turnRight();
+		        i++;
+		      }
+	      }
+	    }
+	  }
+	  
+	}
+
+
+
+	void face():
+	{
+	  Token name = new Token();
+	  String fullName = "";
+
+	  Map<String, Integer> mapDir = new HashMap<String, Integer >();
+
+	  mapDir.put("NORTHEAST", 1); mapDir.put("NORTHSOUTH", 2); mapDir.put("NORTHWEST", 3);
+	  
+	  mapDir.put("EASTSOUTH", 1); mapDir.put("EASTWEST", 2); mapDir.put("EASTNORTH", 3);
+	  
+	  mapDir.put("SOUTHWEST", 1); mapDir.put("SOUTHNORTH", 2); mapDir.put("SOUTHEAST", 3);
+	  
+	  mapDir.put("WESTNORTH", 1); mapDir.put("WESTEAST", 2); mapDir.put("WESTSOUTH", 3);
+	}
+	
+	{
+	  < FACE > ":" ( name = < NORTH >| name = < SOUTH >| name = < EAST >| name = < WEST >)
+
+	  {
+	    if(ejecutar == true) {
+
+	      int facing = world.getFacing();
+
+	      if (facing == 0) fullName += "NORTH";
+	      else if (facing == 1) fullName += "SOUTH";
+	      else if (facing == 2) fullName += "EAST";
+	      else if (facing == 3) fullName += "WEST";
+	      
+
+	      if(!fullName.equals((name.image).toUpperCase())) {
+	        
+	        fullName += (name.image).toUpperCase();
+
+		      int timesToRepeat = mapDir.get(fullName);
+		      int i = 0;
+	
+		      while(i < timesToRepeat) {
+		        world.turnRight();
+		        i++;
+		      }
+	      }
+
+	      salida += "Command: FACE " + (name.image).toUpperCase() + "\n";
+	    }
+	  }
+
+	}
+	
+
+	void putN():
+	{
+	  Token name = new Token();
+	  Token obj = new Token();
+	  int num = 1;
+	}
+
+	{
+	  < PUT > ":" (num = num()|name = < NAME >) "," (obj = < BALLOONS >| obj = < CHIPS >)
+
+	{
+	  
+	  if(ejecutar == true) {
+	    if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+	if((obj.image).toUpperCase().equals("CHIPS")) {
+	  world.putChips(num);
+	  salida += "Command:  PUT CHIPS \n";
+	} else {
+	  world.putBalloons(num);
+	  salida += "Command:  PUT BALLOONS \n";
+	}
+	  }
+	}
+
+	}
+
+
+	void pickN():
+	{
+	  Token name = new Token();
+	  Token obj = new Token();
+	  int num = 1;
+	}
+
+	{
+	  < PICK > ":" (num = num()|name = < NAME >) "," (obj = < BALLOONS >| obj = < CHIPS >)
+
+	{
+	  
+	  if(ejecutar == true) {
+	    if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+	if((obj.image).toUpperCase().equals("CHIPS")) {
+	  world.pickChips(num);
+	  salida += "Command:  PICK CHIPS \n";
+	} else {
+	  world.grabBalloons(num);
+	  salida += "Command:  PICK BALLOONS \n";
+	}
+	  }
+	}
+
+	}
+
+
+	void moveToThe():
+	{
+	  int num = 1;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+
+	{
+	  < MOVETOTHE > ":" (num = num()|name = < NAME >) "," ( dir = < FRONT >| dir = < RIGHT >| dir = < LEFT >| dir = < BACK >)
+
+	  {
+	    if(ejecutar == true) {
+	      if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		if((dir.image).toUpperCase().equals("FRONT")) {
+		  num = num*(-1);
+		  world.moveVertically(num, false);
+		} else if((dir.image).toUpperCase().equals("BACK")) {
+		  world.moveVertically(num, false);
+		} else if((dir.image).toUpperCase().equals("LEFT")) {
+		  num = num*(-1);
+		  world.moveHorizontally(num,false);
+		} else {
+		  world.moveHorizontally(num,false);
+		}
+
+		salida += "Command:  MOVETOTHE " + (dir.image).toUpperCase() + "\n";
+		
+	    }
+	  }
+
+	}
+
+
+	void moveInDir():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+	
+	{
+	  < MOVEINDIR > ":" (num = num()|name = < NAME >) "," ( dir = < NORTH >| dir = < SOUTH >| dir = < EAST >| dir = < WEST >)
+
+	  {
+	    if(ejecutar == true) {
+
+	      if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		turnTo(dir);
+
+	      if((dir.image).toUpperCase().equals("NORTH")) {
+		  num = num*(-1);
+		  world.moveVertically(num, false);
+		} else if((dir.image).toUpperCase().equals("SOUTH")) {
+		  world.moveVertically(num, false);
+		} else if((dir.image).toUpperCase().equals("WEST")) {
+		  num = num*(-1);
+		  world.moveHorizontally(num,false);
+		} else {
+		  world.moveHorizontally(num,false);
+		}
+
+		salida += "Command:  MOVEINDIR " + (dir.image).toUpperCase() + "\n";
+	    }
+	  }
+	  
+	}
+
+
+
+	void jumpToThe():
+	{
+	  int num = 1;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+	{
+	  < JUMPTOTHE > ":" (num = num()|name = < NAME >) "," ( dir = < FRONT >| dir = < RIGHT >| dir = < LEFT >| dir = < BACK >)
+
+	  {
+	    if(ejecutar == true) {
+	      if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		if((dir.image).toUpperCase().equals("FRONT")) {
+		  num = num*(-1);
+		  world.moveVertically(num, true);
+		} else if((dir.image).toUpperCase().equals("BACK")) {
+		  world.moveVertically(num, true);
+		} else if((dir.image).toUpperCase().equals("LEFT")) {
+		  num = num*(-1);
+		  world.moveHorizontally(num,true);
+		} else {
+		  world.moveHorizontally(num,true);
+		}
+
+		
+		salida += "Command:  JUMPTOTHE " + (dir.image).toUpperCase() + "\n";
+	    }
+	  }
+	  
+	}
+
+
+
+	void jumpInDir():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+	
+	{
+	  < JUMPINDIR > ":" (num = num()|name = < NAME >) "," ( dir = < NORTH >| dir = < SOUTH >| dir = < EAST >| dir = < WEST >)
+
+	  {
+	    if(ejecutar == true) {
+
+	      if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		turnTo(dir);
+
+	      if((dir.image).toUpperCase().equals("NORTH")) {
+		  num = num*(-1);
+		  world.moveVertically(num, true);
+		} else if((dir.image).toUpperCase().equals("SOUTH")) {
+		  world.moveVertically(num, true);
+		} else if((dir.image).toUpperCase().equals("WEST")) {
+		  num = num*(-1);
+		  world.moveHorizontally(num,true);
+		} else {
+		  world.moveHorizontally(num,true);
+		}
+
+		salida += "Command:  JUMPINDIR " + (dir.image).toUpperCase() + "\n";
+	    }
+	  }
+	  
+	}
+
+	
+
+// ---------------------------------------------------------------------------------------
+
+
+
+// ------------------------------METODOS DE CONDICIONES-----------------------------------
+
+	boolean facing():
+	{
+	  Token dir = new Token();
+	}
+	
+	{
+	   < FACING > ":" ( dir = < NORTH >| dir = < SOUTH >| dir = < EAST >| dir = < WEST >)
+
+	   {
+	     if(ejecutar == true) {
+
+	       int facing = world.getFacing();
+			int facingDir = 0;
+			String strDir = (dir.image).toUpperCase();
+
+			if(strDir.equals("SOUTH")) facingDir = 1;
+			else if(strDir.equals("EAST")) facingDir = 2;
+			else if(strDir.equals("WEST")) facingDir = 3;
+
+			return (facing == facingDir);
+	     }
+	   } 
+
+	}
+
+
+	boolean canPut():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token obj = new Token();
+	}
+
+	{
+	  < CANPUT > ":" (num = num()| name = < NAME >) "," ( obj = < BALLOONS >| obj = < CHIPS >)
+
+	  {
+	    
+	    if(ejecutar == true) {
+
+			if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+	    String strObj = (obj.image).toUpperCase();
+	      
+	      if(strObj.equals("CHIPS")) {
+	        
+	        if(world.freeSpacesForChips() >= num) {
+	          return true;
+	        } else return false;
+	      }
+
+	      else {
+	        if(world.getMyBalloons() >= num) {
+	          return true;
+	        } else return false;
+	      }
+	      
+	    }
+	  }
+	  
+	}
+
+
+	boolean canPick():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token obj = new Token();
+	}
+	
+	{
+	  < CANPICK > ":" (num = num()| name = < NAME >) "," ( obj = < BALLOONS >| obj = < CHIPS >)
+
+		{
+	    
+	    if(ejecutar == true) {
+
+			if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+	    String strObj = (obj.image).toUpperCase();
+	      
+	      if(strObj.equals("CHIPS")) {
+	        
+	        if(world.chipsToPick() >= num) {
+	          return true;
+	        } else return false;
+	      }
+
+	      else {
+	        if(world.countBalloons() >= num) {
+	          return true;
+	        } else return false;
+	      }
+	      
+	    }
+	  }
+	  
+	}
+
+
+
+	boolean canMoveInDir():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+
+	{
+	  < CANMOVEINDIR > ":" (num = num()| name = < NAME >) "," ( dir = < NORTH >| dir = < SOUTH >| dir = < EAST >| dir = < WEST >)
+
+	{
+	  if(ejecutar == true) {
+
+	    String strDir = (dir.image).toUpperCase();
+
+	    if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		if(strDir == "NORTH") {
+		  try {
+		    world.moveVertically((-num), false);
+		    world.moveVertically(num, false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "SOUTH") {
+		  try {
+		    world.moveVertically(num, false);
+		    world.moveVertically((-num), false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "EAST") {
+		  try {
+		    world.moveHorizontally(num, false);
+		    world.moveHorizontally((-num), false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "WEST") {
+		  try {
+		    world.moveHorizontally((-num), false);
+		    world.moveHorizontally(num, false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+	  }
+	}
+	
+	}
+
+
+
+	boolean canJumpInDir():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+
+	{
+	  < CANJUMPINDIR > ":" (num = num()| name = < NAME >) "," ( dir = < NORTH >| dir = < SOUTH >| dir = < EAST >| dir = < WEST >)
+
+	  {
+	  if(ejecutar == true) {
+
+	    String strDir = (dir.image).toUpperCase();
+
+	    if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		if(strDir == "NORTH") {
+		  try {
+		    world.moveVertically((-num), true);
+		    world.moveVertically(num, true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "SOUTH") {
+		  try {
+		    world.moveVertically(num, true);
+		    world.moveVertically((-num), true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "EAST") {
+		  try {
+		    world.moveHorizontally(num, true);
+		    world.moveHorizontally((-num), true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "WEST") {
+		  try {
+		    world.moveHorizontally((-num), true);
+		    world.moveHorizontally(num, true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+	  }
+	}
+	
+	}
+
+
+	boolean canMoveToThe():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+
+	{
+		< CANMOVETOTHE > ":" (num = num()| name = < NAME >) "," ( dir = < FRONT >| dir = < RIGHT >| dir = < LEFT >| dir = < BACK >)
+
+		{
+	  if(ejecutar == true) {
+
+	    String strDir = (dir.image).toUpperCase();
+
+	    if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		if(strDir == "FRONT") {
+		  try {
+		    world.moveVertically((-num), false);
+		    world.moveVertically(num, false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "BACK") {
+		  try {
+		    world.moveVertically(num, false);
+		    world.moveVertically((-num), false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "RIGHT") {
+		  try {
+		    world.moveHorizontally(num, false);
+		    world.moveHorizontally((-num), false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "LEFT") {
+		  try {
+		    world.moveHorizontally((-num), false);
+		    world.moveHorizontally(num, false);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+	  }
+	}
+		
+	}
+
+
+
+	boolean canJumpToThe():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	  Token dir = new Token();
+	}
+
+	{
+		< CANJUMPTOTHE > ":" (num = num()| name = < NAME >) "," ( dir = < FRONT >| dir = < RIGHT >| dir = < LEFT >| dir = < BACK >)
+
+		{
+	  if(ejecutar == true) {
+
+	    String strDir = (dir.image).toUpperCase();
+
+	    if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+
+		if(strDir == "FRONT") {
+		  try {
+		    world.moveVertically((-num), true);
+		    world.moveVertically(num, true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "BACK") {
+		  try {
+		    world.moveVertically(num, true);
+		    world.moveVertically((-num), true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "RIGHT") {
+		  try {
+		    world.moveHorizontally(num, true);
+		    world.moveHorizontally((-num), true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+
+		else if(strDir == "LEFT") {
+		  try {
+		    world.moveHorizontally((-num), true);
+		    world.moveHorizontally(num, true);
+		    return true;
+		  } catch (Exception e) {
+		    return false;
+		  }
+		}
+	  }
+	}
+		
+	}
+
+//---------------------------------------------------------------------------------------
+
+
+//--------------------------------ESTRUCTURAS DE CONTROL---------------------------------
+
+	void conditional(): //      ---> probar esto
+	{
+	  boolean cond;
+	}
+	
+	{
+	  (< IF > ":" cond = conditions() < THEN > ":" {
+	    
+	    if(cond) {
+	    instructions();
+	    }
+	  }
+	    < ELSE > ":" {
+	      if(!cond) { 
+	      instructions();
+	      }
+	    } )
+	}
+
+
+	
+
+
+
+//---------------------------------------------------------------------------------------
+
+
+
+// -------------------------------PRODUCCIONES--------------------------------------------
 
 	int one_line() :
 	{}
@@ -400,7 +1182,7 @@ TOKEN: //Tipos de datos
  	}
 	
 	
-	void listofnames() :	
+	void listofnames() :
 	{}
 	{
  	((< NAME >) (",")?)*
@@ -441,8 +1223,8 @@ TOKEN: //Tipos de datos
 	void instruction() :	
 	{}
 	{
- 	(command2()
-	| (< IF > ":" conditions() < THEN > ":" instructions()  < ELSE > ":" instructions()) | (< WHILE > ":" conditions() < DO > ":" instructions()) | (< REPEAT > ":" < NUM > instructions())) (";")?
+ 	(command2() // | conditions()
+	| conditional() | (< WHILE > ":" conditions() < DO > ":" instructions()) | (< REPEAT > ":" < NUM > instructions())) (";")?
 	}
 	
 	void inst():
@@ -452,6 +1234,7 @@ TOKEN: //Tipos de datos
 	"[" ((instruction()| < NAME > ":" ((num()|< NAME >) (",")?)* ) (";")?)* "]"
 	}
 
+// ---------------------------------------------------------------------------------------
 
 	
 	/**

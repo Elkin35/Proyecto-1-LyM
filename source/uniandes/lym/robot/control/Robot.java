@@ -10,10 +10,14 @@ import java.util.Vector;
 import java.util.LinkedList;
 import java.util.*;
 
+
 @SuppressWarnings("serial")
+
+
 public class Robot implements RobotConstants {
 
         ArrayList<String> listaVariables = new ArrayList<String>();
+
         Map<String, Integer> mapaVariables = new HashMap<String, Integer >();
 
         boolean ejecutar = false;
@@ -25,7 +29,7 @@ public class Robot implements RobotConstants {
                 world = (RobotWorldDec) w;
         }
 
-        String salida=new String();
+        String salida="";
 
 // ----------------------------------PRODUCCIONES----------------------------------
 
@@ -132,483 +136,104 @@ public class Robot implements RobotConstants {
                 Token yVar = new Token();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASSIGNTO:
-      jj_consume_token(ASSIGNTO);
-      jj_consume_token(54);
-      num = num();
-      jj_consume_token(53);
-      name = jj_consume_token(NAME);
-            if(ejecutar == true) {
-              if(listaVariables.contains(name.image)) {
-              mapaVariables.put(name.image, num);
-            } else {
-              {if (true) throw new Error("La variable '"+name.image+"' debe ser declarada antes de usarse.");}
-            }
-
-            }
+      assignTo();
       break;
     case GOTO:
-      jj_consume_token(GOTO);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        xInt = num();
-        break;
-      case NAME:
-        xVar = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[2] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        yInt = num();
-        break;
-      case NAME:
-        yVar = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[3] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-          if(ejecutar == true) {
-            if(xVar.image != null && mapaVariables.containsKey(xVar.image)) {
-                  xInt = mapaVariables.get(xVar.image);
-                } else if (xVar.image != null && !mapaVariables.containsKey(xVar.image)) {
-                  {if (true) throw new Error("La variable "+xVar+" debe ser declarada antes de usarse.");}
-                }
-
-                if(yVar.image != null && mapaVariables.containsKey(yVar.image)) {
-                  yInt = mapaVariables.get(yVar.image);
-                } else if (yVar.image != null && !mapaVariables.containsKey(yVar.image)) {
-                  {if (true) throw new Error("La variable "+yVar.image+" debe ser declarada antes de usarse.");}
-                }
-
-                try {
-                        world.setPostion(xInt,yInt);
-                } catch(Exception e) {
-                  System.out.println(e);
-                }
-          }
+      goTo();
       break;
     case MOVE:
-      jj_consume_token(MOVE);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[4] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-          if (ejecutar == true) {
-            if(name.image != null && mapaVariables.containsKey(name.image)) {
-                  num = mapaVariables.get(name.image);
-                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
-                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
-                }
-
-                world.moveForward(num, false);
-
-            }
+      move();
       break;
     case TURN:
       turn();
       break;
     case FACE:
-      jj_consume_token(FACE);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NORTH:
-        name = jj_consume_token(NORTH);
-        break;
-      case SOUTH:
-        name = jj_consume_token(SOUTH);
-        break;
-      case EAST:
-        name = jj_consume_token(EAST);
-        break;
-      case WEST:
-        name = jj_consume_token(WEST);
-        break;
-      default:
-        jj_la1[5] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      face();
       break;
     case PUT:
-      jj_consume_token(PUT);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[6] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case BALLOONS:
-        jj_consume_token(BALLOONS);
-        break;
-      case CHIPS:
-        jj_consume_token(CHIPS);
-        break;
-      default:
-        jj_la1[7] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      putN();
       break;
     case PICK:
-      jj_consume_token(PICK);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[8] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case BALLOONS:
-        jj_consume_token(BALLOONS);
-        break;
-      case CHIPS:
-        jj_consume_token(CHIPS);
-        break;
-      default:
-        jj_la1[9] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      pickN();
       break;
     case MOVETOTHE:
-      jj_consume_token(MOVETOTHE);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[10] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case FRONT:
-        jj_consume_token(FRONT);
-        break;
-      case RIGHT:
-        jj_consume_token(RIGHT);
-        break;
-      case LEFT:
-        jj_consume_token(LEFT);
-        break;
-      case BACK:
-        jj_consume_token(BACK);
-        break;
-      default:
-        jj_la1[11] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      moveToThe();
       break;
     case MOVEINDIR:
-      jj_consume_token(MOVEINDIR);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[12] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NORTH:
-        jj_consume_token(NORTH);
-        break;
-      case SOUTH:
-        jj_consume_token(SOUTH);
-        break;
-      case EAST:
-        jj_consume_token(EAST);
-        break;
-      case WEST:
-        jj_consume_token(WEST);
-        break;
-      default:
-        jj_la1[13] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      moveInDir();
       break;
     case JUMPTOTHE:
-      jj_consume_token(JUMPTOTHE);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[14] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case FRONT:
-        jj_consume_token(FRONT);
-        break;
-      case RIGHT:
-        jj_consume_token(RIGHT);
-        break;
-      case LEFT:
-        jj_consume_token(LEFT);
-        break;
-      case BACK:
-        jj_consume_token(BACK);
-        break;
-      default:
-        jj_la1[15] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      jumpToThe();
       break;
     case JUMPINDIR:
-      jj_consume_token(JUMPINDIR);
-      jj_consume_token(54);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NUM:
-        num = num();
-        break;
-      case NAME:
-        name = jj_consume_token(NAME);
-        break;
-      default:
-        jj_la1[16] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NORTH:
-        jj_consume_token(NORTH);
-        break;
-      case SOUTH:
-        jj_consume_token(SOUTH);
-        break;
-      case EAST:
-        jj_consume_token(EAST);
-        break;
-      case WEST:
-        jj_consume_token(WEST);
-        break;
-      default:
-        jj_la1[17] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      jumpInDir();
       break;
     case NOP:
       jj_consume_token(NOP);
       jj_consume_token(54);
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[2] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
-  final public void conditions() throws ParseException {
+  final public boolean conditions() throws ParseException {
+          Token name = new Token();
+                int num = 0;
+                boolean bool;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case FACING:
-      jj_consume_token(FACING);
-      jj_consume_token(54);
-      jj_consume_token(NORTH);
-      break;
-    case SOUTH:
-      jj_consume_token(SOUTH);
-      break;
-    case EAST:
-      jj_consume_token(EAST);
-      break;
-    case WEST:
-      jj_consume_token(WEST);
+      bool = facing();
       break;
     case CANPUT:
-      jj_consume_token(CANPUT);
-      jj_consume_token(54);
-      num();
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case BALLOONS:
-        jj_consume_token(BALLOONS);
-        break;
-      case CHIPS:
-        jj_consume_token(CHIPS);
-        break;
-      default:
-        jj_la1[19] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      bool = canPut();
       break;
     case CANPICK:
-      jj_consume_token(CANPICK);
-      jj_consume_token(54);
-      num();
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case BALLOONS:
-        jj_consume_token(BALLOONS);
-        break;
-      case CHIPS:
-        jj_consume_token(CHIPS);
-        break;
-      default:
-        jj_la1[20] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      bool = canPick();
       break;
     case CANMOVEINDIR:
-      jj_consume_token(CANMOVEINDIR);
-      jj_consume_token(54);
-      num();
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NORTH:
-        jj_consume_token(NORTH);
-        break;
-      case SOUTH:
-        jj_consume_token(SOUTH);
-        break;
-      case EAST:
-        jj_consume_token(EAST);
-        break;
-      case WEST:
-        jj_consume_token(WEST);
-        break;
-      default:
-        jj_la1[21] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      bool = canMoveInDir();
       break;
     case CANJUMPINDIR:
-      jj_consume_token(CANJUMPINDIR);
-      jj_consume_token(54);
-      num();
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case NORTH:
-        jj_consume_token(NORTH);
-        break;
-      case SOUTH:
-        jj_consume_token(SOUTH);
-        break;
-      case EAST:
-        jj_consume_token(EAST);
-        break;
-      case WEST:
-        jj_consume_token(WEST);
-        break;
-      default:
-        jj_la1[22] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      bool = canJumpInDir();
       break;
     case CANMOVETOTHE:
-      jj_consume_token(CANMOVETOTHE);
-      jj_consume_token(54);
-      num();
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case FRONT:
-        jj_consume_token(FRONT);
-        break;
-      case RIGHT:
-        jj_consume_token(RIGHT);
-        break;
-      case LEFT:
-        jj_consume_token(LEFT);
-        break;
-      case BACK:
-        jj_consume_token(BACK);
-        break;
-      default:
-        jj_la1[23] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      bool = canMoveToThe();
       break;
     case CANJUMPTOTHE:
-      jj_consume_token(CANJUMPTOTHE);
-      jj_consume_token(54);
-      num();
-      jj_consume_token(53);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case FRONT:
-        jj_consume_token(FRONT);
-        break;
-      case RIGHT:
-        jj_consume_token(RIGHT);
-        break;
-      case LEFT:
-        jj_consume_token(LEFT);
-        break;
-      case BACK:
-        jj_consume_token(BACK);
-        break;
-      default:
-        jj_la1[24] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      bool = canJumpToThe();
+      break;
+    case NOT:
+      bool = conditionNot();
+         {if (true) return bool;}
       break;
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[3] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
+  final public boolean conditionNot() throws ParseException {
+          boolean cond;
+    jj_consume_token(NOT);
+    jj_consume_token(54);
+    cond = conditions();
+          if(ejecutar == true) {
+
+            if(cond == true) {
+              {if (true) return false;}
+            } else {
+              {if (true) return true;}
+            }
+          }
+    throw new Error("Missing return statement in function");
+  }
+
+// ----------------------------METODOS DE COMANDOS----------------------------
   final public void put() throws ParseException {
                 int f=1;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -625,7 +250,7 @@ public class Robot implements RobotConstants {
                                                       world.putBalloons(f); salida = "Command:  Put Balloons";
       break;
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[4] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -647,12 +272,119 @@ public class Robot implements RobotConstants {
                                                       world.grabBalloons(f);salida="Command:  Pick balloons";
       break;
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[5] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
+  final public void assignTo() throws ParseException {
+          Token name = new Token();
+                int num = 0;
+    jj_consume_token(ASSIGNTO);
+    jj_consume_token(54);
+    num = num();
+    jj_consume_token(53);
+    name = jj_consume_token(NAME);
+            if(ejecutar == true) {
+              if(listaVariables.contains(name.image)) {
+              mapaVariables.put(name.image, num);
+            } else {
+              {if (true) throw new Error("La variable '"+name.image+"' debe ser declarada antes de usarse.");}
+            }
+            }
+
+            salida += "Command: ASSIGNTO: " + num + "," + name + "\u005cn";
+  }
+
+  final public void goTo() throws ParseException {
+                int xInt = -1;
+                int yInt = -1;
+                Token xVar = new Token();
+                Token yVar = new Token();
+    jj_consume_token(GOTO);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      xInt = num();
+      break;
+    case NAME:
+      xVar = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[6] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      yInt = num();
+      break;
+    case NAME:
+      yVar = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[7] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+            if(xVar.image != null && mapaVariables.containsKey(xVar.image)) {
+                  xInt = mapaVariables.get(xVar.image);
+                } else if (xVar.image != null && !mapaVariables.containsKey(xVar.image)) {
+                  {if (true) throw new Error("La variable "+xVar+" debe ser declarada antes de usarse.");}
+                }
+
+                if(yVar.image != null && mapaVariables.containsKey(yVar.image)) {
+                  yInt = mapaVariables.get(yVar.image);
+                } else if (yVar.image != null && !mapaVariables.containsKey(yVar.image)) {
+                  {if (true) throw new Error("La variable "+yVar.image+" debe ser declarada antes de usarse.");}
+                }
+
+                try {
+                        world.setPostion(xInt,yInt);
+                } catch(Exception e) {
+                  System.out.println(e);
+                }
+
+                salida += "Command: GOTO(" + xInt + "," + yInt + ")";
+          }
+  }
+
+  final public void move() throws ParseException {
+                Token name = new Token();
+                int num = 0;
+    jj_consume_token(MOVE);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[8] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if (ejecutar == true) {
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                world.moveForward(num, false);
+
+            }
+
+            salida += "Command: MOVE(" + num + "\u005cn";
+  }
+
+        /* La funcion Turn hace que el robot gire 90° en direccion LEFT, RIGHT
+	o que gire 180° (AROUND) */
   final public void turn() throws ParseException {
           Token name = new Token();
     jj_consume_token(TURN);
@@ -668,7 +400,7 @@ public class Robot implements RobotConstants {
       name = jj_consume_token(AROUND);
       break;
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -678,35 +410,1010 @@ public class Robot implements RobotConstants {
 
 
                   if((name.image).toUpperCase().equals("LEFT")) {
-                    if(facing == 0) {
-                      world.turnRight();
-                      world.turnRight();
-                      world.turnRight();
-                    } else if(facing == 1) {
-                      world.turnRight();
-                    } else if(facing == 2) {
-                      world.turnRight();
-                    }
+                    world.turnRight();
+                    world.turnRight();
+                    world.turnRight();
+
 
                   } else if((name.image).toUpperCase().equals("RIGHT")) {
-                    if(facing == 0) {
-                      world.turnRight();
-                    } else if(facing == 1) {
-                      world.turnRight();
-                      world.turnRight();
-                      world.turnRight();
-                    } else if(facing == 3) {
-                      world.turnRight();
-                      world.turnRight();
-                    }
+                    world.turnRight();
 
-                } /*else if((name.image).toUpperCase().equals("AROUND")) {
-		  Falta saber que es around
-		}*/
+
+                } else if((name.image).toUpperCase().equals("AROUND")) {
+                  world.turnRight();
+                  world.turnRight();
+                }
+
+                salida += "Command: TURN " + (name.image).toUpperCase() + "\u005cn";
         }
   }
 
-// Producciones
+  final public void turnTo(Token name) throws ParseException {
+          String fullName = "";
+
+          Map<String, Integer> mapDir = new HashMap<String, Integer >();
+
+          mapDir.put("NORTHEAST", 1); mapDir.put("NORTHSOUTH", 2); mapDir.put("NORTHWEST", 3);
+
+          mapDir.put("EASTSOUTH", 1); mapDir.put("EASTWEST", 2); mapDir.put("EASTNORTH", 3);
+
+          mapDir.put("SOUTHWEST", 1); mapDir.put("SOUTHNORTH", 2); mapDir.put("SOUTHEAST", 3);
+
+          mapDir.put("WESTNORTH", 1); mapDir.put("WESTEAST", 2); mapDir.put("WESTSOUTH", 3);
+
+          if(ejecutar == true) {
+
+              int facing = world.getFacing();
+
+              if (facing == 0) fullName += "NORTH";
+              else if (facing == 1) fullName += "SOUTH";
+              else if (facing == 2) fullName += "EAST";
+              else if (facing == 3) fullName += "WEST";
+
+
+              if(!fullName.equals((name.image).toUpperCase())) {
+
+                fullName += (name.image).toUpperCase();
+
+                      int timesToRepeat = mapDir.get(fullName);
+                      int i = 0;
+
+                      while(i < timesToRepeat) {
+                        world.turnRight();
+                        i++;
+                      }
+              }
+            }
+  }
+
+  final public void face() throws ParseException {
+          Token name = new Token();
+          String fullName = "";
+
+          Map<String, Integer> mapDir = new HashMap<String, Integer >();
+
+          mapDir.put("NORTHEAST", 1); mapDir.put("NORTHSOUTH", 2); mapDir.put("NORTHWEST", 3);
+
+          mapDir.put("EASTSOUTH", 1); mapDir.put("EASTWEST", 2); mapDir.put("EASTNORTH", 3);
+
+          mapDir.put("SOUTHWEST", 1); mapDir.put("SOUTHNORTH", 2); mapDir.put("SOUTHEAST", 3);
+
+          mapDir.put("WESTNORTH", 1); mapDir.put("WESTEAST", 2); mapDir.put("WESTSOUTH", 3);
+    jj_consume_token(FACE);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NORTH:
+      name = jj_consume_token(NORTH);
+      break;
+    case SOUTH:
+      name = jj_consume_token(SOUTH);
+      break;
+    case EAST:
+      name = jj_consume_token(EAST);
+      break;
+    case WEST:
+      name = jj_consume_token(WEST);
+      break;
+    default:
+      jj_la1[10] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+
+              int facing = world.getFacing();
+
+              if (facing == 0) fullName += "NORTH";
+              else if (facing == 1) fullName += "SOUTH";
+              else if (facing == 2) fullName += "EAST";
+              else if (facing == 3) fullName += "WEST";
+
+
+              if(!fullName.equals((name.image).toUpperCase())) {
+
+                fullName += (name.image).toUpperCase();
+
+                      int timesToRepeat = mapDir.get(fullName);
+                      int i = 0;
+
+                      while(i < timesToRepeat) {
+                        world.turnRight();
+                        i++;
+                      }
+              }
+
+              salida += "Command: FACE " + (name.image).toUpperCase() + "\u005cn";
+            }
+  }
+
+  final public void putN() throws ParseException {
+          Token name = new Token();
+          Token obj = new Token();
+          int num = 1;
+    jj_consume_token(PUT);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[11] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case BALLOONS:
+      obj = jj_consume_token(BALLOONS);
+      break;
+    case CHIPS:
+      obj = jj_consume_token(CHIPS);
+      break;
+    default:
+      jj_la1[12] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+        if((obj.image).toUpperCase().equals("CHIPS")) {
+          world.putChips(num);
+          salida += "Command:  PUT CHIPS \u005cn";
+        } else {
+          world.putBalloons(num);
+          salida += "Command:  PUT BALLOONS \u005cn";
+        }
+          }
+  }
+
+  final public void pickN() throws ParseException {
+          Token name = new Token();
+          Token obj = new Token();
+          int num = 1;
+    jj_consume_token(PICK);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[13] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case BALLOONS:
+      obj = jj_consume_token(BALLOONS);
+      break;
+    case CHIPS:
+      obj = jj_consume_token(CHIPS);
+      break;
+    default:
+      jj_la1[14] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+        if((obj.image).toUpperCase().equals("CHIPS")) {
+          world.pickChips(num);
+          salida += "Command:  PICK CHIPS \u005cn";
+        } else {
+          world.grabBalloons(num);
+          salida += "Command:  PICK BALLOONS \u005cn";
+        }
+          }
+  }
+
+  final public void moveToThe() throws ParseException {
+          int num = 1;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(MOVETOTHE);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[15] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case FRONT:
+      dir = jj_consume_token(FRONT);
+      break;
+    case RIGHT:
+      dir = jj_consume_token(RIGHT);
+      break;
+    case LEFT:
+      dir = jj_consume_token(LEFT);
+      break;
+    case BACK:
+      dir = jj_consume_token(BACK);
+      break;
+    default:
+      jj_la1[16] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+              if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                if((dir.image).toUpperCase().equals("FRONT")) {
+                  num = num*(-1);
+                  world.moveVertically(num, false);
+                } else if((dir.image).toUpperCase().equals("BACK")) {
+                  world.moveVertically(num, false);
+                } else if((dir.image).toUpperCase().equals("LEFT")) {
+                  num = num*(-1);
+                  world.moveHorizontally(num,false);
+                } else {
+                  world.moveHorizontally(num,false);
+                }
+
+                salida += "Command:  MOVETOTHE " + (dir.image).toUpperCase() + "\u005cn";
+
+            }
+  }
+
+  final public void moveInDir() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(MOVEINDIR);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[17] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NORTH:
+      dir = jj_consume_token(NORTH);
+      break;
+    case SOUTH:
+      dir = jj_consume_token(SOUTH);
+      break;
+    case EAST:
+      dir = jj_consume_token(EAST);
+      break;
+    case WEST:
+      dir = jj_consume_token(WEST);
+      break;
+    default:
+      jj_la1[18] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+
+              if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                turnTo(dir);
+
+              if((dir.image).toUpperCase().equals("NORTH")) {
+                  num = num*(-1);
+                  world.moveVertically(num, false);
+                } else if((dir.image).toUpperCase().equals("SOUTH")) {
+                  world.moveVertically(num, false);
+                } else if((dir.image).toUpperCase().equals("WEST")) {
+                  num = num*(-1);
+                  world.moveHorizontally(num,false);
+                } else {
+                  world.moveHorizontally(num,false);
+                }
+
+                salida += "Command:  MOVEINDIR " + (dir.image).toUpperCase() + "\u005cn";
+            }
+  }
+
+  final public void jumpToThe() throws ParseException {
+          int num = 1;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(JUMPTOTHE);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[19] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case FRONT:
+      dir = jj_consume_token(FRONT);
+      break;
+    case RIGHT:
+      dir = jj_consume_token(RIGHT);
+      break;
+    case LEFT:
+      dir = jj_consume_token(LEFT);
+      break;
+    case BACK:
+      dir = jj_consume_token(BACK);
+      break;
+    default:
+      jj_la1[20] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+              if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                if((dir.image).toUpperCase().equals("FRONT")) {
+                  num = num*(-1);
+                  world.moveVertically(num, true);
+                } else if((dir.image).toUpperCase().equals("BACK")) {
+                  world.moveVertically(num, true);
+                } else if((dir.image).toUpperCase().equals("LEFT")) {
+                  num = num*(-1);
+                  world.moveHorizontally(num,true);
+                } else {
+                  world.moveHorizontally(num,true);
+                }
+
+
+                salida += "Command:  JUMPTOTHE " + (dir.image).toUpperCase() + "\u005cn";
+            }
+  }
+
+  final public void jumpInDir() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(JUMPINDIR);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[21] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NORTH:
+      dir = jj_consume_token(NORTH);
+      break;
+    case SOUTH:
+      dir = jj_consume_token(SOUTH);
+      break;
+    case EAST:
+      dir = jj_consume_token(EAST);
+      break;
+    case WEST:
+      dir = jj_consume_token(WEST);
+      break;
+    default:
+      jj_la1[22] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+
+              if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                turnTo(dir);
+
+              if((dir.image).toUpperCase().equals("NORTH")) {
+                  num = num*(-1);
+                  world.moveVertically(num, true);
+                } else if((dir.image).toUpperCase().equals("SOUTH")) {
+                  world.moveVertically(num, true);
+                } else if((dir.image).toUpperCase().equals("WEST")) {
+                  num = num*(-1);
+                  world.moveHorizontally(num,true);
+                } else {
+                  world.moveHorizontally(num,true);
+                }
+
+                salida += "Command:  JUMPINDIR " + (dir.image).toUpperCase() + "\u005cn";
+            }
+  }
+
+// ---------------------------------------------------------------------------------------
+
+
+
+// ------------------------------METODOS DE CONDICIONES-----------------------------------
+  final public boolean facing() throws ParseException {
+          Token dir = new Token();
+    jj_consume_token(FACING);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NORTH:
+      dir = jj_consume_token(NORTH);
+      break;
+    case SOUTH:
+      dir = jj_consume_token(SOUTH);
+      break;
+    case EAST:
+      dir = jj_consume_token(EAST);
+      break;
+    case WEST:
+      dir = jj_consume_token(WEST);
+      break;
+    default:
+      jj_la1[23] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+             if(ejecutar == true) {
+
+               int facing = world.getFacing();
+                        int facingDir = 0;
+                        String strDir = (dir.image).toUpperCase();
+
+                        if(strDir.equals("SOUTH")) facingDir = 1;
+                        else if(strDir.equals("EAST")) facingDir = 2;
+                        else if(strDir.equals("WEST")) facingDir = 3;
+
+                        {if (true) return (facing == facingDir);}
+             }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean canPut() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token obj = new Token();
+    jj_consume_token(CANPUT);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[24] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case BALLOONS:
+      obj = jj_consume_token(BALLOONS);
+      break;
+    case CHIPS:
+      obj = jj_consume_token(CHIPS);
+      break;
+    default:
+      jj_la1[25] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+
+                        if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+            String strObj = (obj.image).toUpperCase();
+
+              if(strObj.equals("CHIPS")) {
+
+                if(world.freeSpacesForChips() >= num) {
+                  {if (true) return true;}
+                } else {if (true) return false;}
+              }
+
+              else {
+                if(world.getMyBalloons() >= num) {
+                  {if (true) return true;}
+                } else {if (true) return false;}
+              }
+
+            }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean canPick() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token obj = new Token();
+    jj_consume_token(CANPICK);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[26] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case BALLOONS:
+      obj = jj_consume_token(BALLOONS);
+      break;
+    case CHIPS:
+      obj = jj_consume_token(CHIPS);
+      break;
+    default:
+      jj_la1[27] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+            if(ejecutar == true) {
+
+                        if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+            String strObj = (obj.image).toUpperCase();
+
+              if(strObj.equals("CHIPS")) {
+
+                if(world.chipsToPick() >= num) {
+                  {if (true) return true;}
+                } else {if (true) return false;}
+              }
+
+              else {
+                if(world.countBalloons() >= num) {
+                  {if (true) return true;}
+                } else {if (true) return false;}
+              }
+
+            }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean canMoveInDir() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(CANMOVEINDIR);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[28] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NORTH:
+      dir = jj_consume_token(NORTH);
+      break;
+    case SOUTH:
+      dir = jj_consume_token(SOUTH);
+      break;
+    case EAST:
+      dir = jj_consume_token(EAST);
+      break;
+    case WEST:
+      dir = jj_consume_token(WEST);
+      break;
+    default:
+      jj_la1[29] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+
+            String strDir = (dir.image).toUpperCase();
+
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                if(strDir == "NORTH") {
+                  try {
+                    world.moveVertically((-num), false);
+                    world.moveVertically(num, false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "SOUTH") {
+                  try {
+                    world.moveVertically(num, false);
+                    world.moveVertically((-num), false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "EAST") {
+                  try {
+                    world.moveHorizontally(num, false);
+                    world.moveHorizontally((-num), false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "WEST") {
+                  try {
+                    world.moveHorizontally((-num), false);
+                    world.moveHorizontally(num, false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+          }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean canJumpInDir() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(CANJUMPINDIR);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[30] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NORTH:
+      dir = jj_consume_token(NORTH);
+      break;
+    case SOUTH:
+      dir = jj_consume_token(SOUTH);
+      break;
+    case EAST:
+      dir = jj_consume_token(EAST);
+      break;
+    case WEST:
+      dir = jj_consume_token(WEST);
+      break;
+    default:
+      jj_la1[31] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+
+            String strDir = (dir.image).toUpperCase();
+
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                if(strDir == "NORTH") {
+                  try {
+                    world.moveVertically((-num), true);
+                    world.moveVertically(num, true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "SOUTH") {
+                  try {
+                    world.moveVertically(num, true);
+                    world.moveVertically((-num), true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "EAST") {
+                  try {
+                    world.moveHorizontally(num, true);
+                    world.moveHorizontally((-num), true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "WEST") {
+                  try {
+                    world.moveHorizontally((-num), true);
+                    world.moveHorizontally(num, true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+          }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean canMoveToThe() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(CANMOVETOTHE);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[32] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case FRONT:
+      dir = jj_consume_token(FRONT);
+      break;
+    case RIGHT:
+      dir = jj_consume_token(RIGHT);
+      break;
+    case LEFT:
+      dir = jj_consume_token(LEFT);
+      break;
+    case BACK:
+      dir = jj_consume_token(BACK);
+      break;
+    default:
+      jj_la1[33] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+
+            String strDir = (dir.image).toUpperCase();
+
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                if(strDir == "FRONT") {
+                  try {
+                    world.moveVertically((-num), false);
+                    world.moveVertically(num, false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "BACK") {
+                  try {
+                    world.moveVertically(num, false);
+                    world.moveVertically((-num), false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "RIGHT") {
+                  try {
+                    world.moveHorizontally(num, false);
+                    world.moveHorizontally((-num), false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "LEFT") {
+                  try {
+                    world.moveHorizontally((-num), false);
+                    world.moveHorizontally(num, false);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+          }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean canJumpToThe() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+          Token dir = new Token();
+    jj_consume_token(CANJUMPTOTHE);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[34] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(53);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case FRONT:
+      dir = jj_consume_token(FRONT);
+      break;
+    case RIGHT:
+      dir = jj_consume_token(RIGHT);
+      break;
+    case LEFT:
+      dir = jj_consume_token(LEFT);
+      break;
+    case BACK:
+      dir = jj_consume_token(BACK);
+      break;
+    default:
+      jj_la1[35] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(ejecutar == true) {
+
+            String strDir = (dir.image).toUpperCase();
+
+            if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+
+                if(strDir == "FRONT") {
+                  try {
+                    world.moveVertically((-num), true);
+                    world.moveVertically(num, true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "BACK") {
+                  try {
+                    world.moveVertically(num, true);
+                    world.moveVertically((-num), true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "RIGHT") {
+                  try {
+                    world.moveHorizontally(num, true);
+                    world.moveHorizontally((-num), true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+
+                else if(strDir == "LEFT") {
+                  try {
+                    world.moveHorizontally((-num), true);
+                    world.moveHorizontally(num, true);
+                    {if (true) return true;}
+                  } catch (Exception e) {
+                    {if (true) return false;}
+                  }
+                }
+          }
+    throw new Error("Missing return statement in function");
+  }
+
+//---------------------------------------------------------------------------------------
+
+
+//--------------------------------ESTRUCTURAS DE CONTROL---------------------------------
+  final public void conditional() throws ParseException {
+          boolean cond;
+    jj_consume_token(IF);
+    jj_consume_token(54);
+    cond = conditions();
+    jj_consume_token(THEN);
+    jj_consume_token(54);
+            if(cond) {
+            instructions();
+            }
+    jj_consume_token(ELSE);
+    jj_consume_token(54);
+              if(!cond) {
+              instructions();
+              }
+  }
+
+//---------------------------------------------------------------------------------------
+
+
+
+// -------------------------------PRODUCCIONES--------------------------------------------
   final public int one_line() throws ParseException {
     robot();
         {if (true) return (int) Math.pow(2,3);}
@@ -730,7 +1437,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[29] = jj_gen;
+        jj_la1[36] = jj_gen;
         break label_1;
       }
       var = jj_consume_token(NAME);
@@ -739,7 +1446,7 @@ public class Robot implements RobotConstants {
         jj_consume_token(53);
         break;
       default:
-        jj_la1[30] = jj_gen;
+        jj_la1[37] = jj_gen;
         ;
       }
                                              listaVariables.add(var.image);
@@ -755,7 +1462,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[31] = jj_gen;
+        jj_la1[38] = jj_gen;
         break label_2;
       }
       jj_consume_token(NAME);
@@ -764,7 +1471,7 @@ public class Robot implements RobotConstants {
         jj_consume_token(53);
         break;
       default:
-        jj_la1[32] = jj_gen;
+        jj_la1[39] = jj_gen;
         ;
       }
     }
@@ -780,7 +1487,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[33] = jj_gen;
+        jj_la1[40] = jj_gen;
         break label_3;
       }
       procdef();
@@ -827,7 +1534,7 @@ public class Robot implements RobotConstants {
           ;
           break;
         default:
-          jj_la1[34] = jj_gen;
+          jj_la1[41] = jj_gen;
           break label_4;
         }
       }
@@ -870,13 +1577,13 @@ public class Robot implements RobotConstants {
           ;
           break;
         default:
-          jj_la1[35] = jj_gen;
+          jj_la1[42] = jj_gen;
           break label_5;
         }
       }
       break;
     default:
-      jj_la1[36] = jj_gen;
+      jj_la1[43] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -899,15 +1606,7 @@ public class Robot implements RobotConstants {
       command2();
       break;
     case IF:
-      jj_consume_token(IF);
-      jj_consume_token(54);
-      conditions();
-      jj_consume_token(THEN);
-      jj_consume_token(54);
-      instructions();
-      jj_consume_token(ELSE);
-      jj_consume_token(54);
-      instructions();
+      conditional();
       break;
     case WHILE:
       jj_consume_token(WHILE);
@@ -924,7 +1623,7 @@ public class Robot implements RobotConstants {
       instructions();
       break;
     default:
-      jj_la1[37] = jj_gen;
+      jj_la1[44] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -933,7 +1632,7 @@ public class Robot implements RobotConstants {
       jj_consume_token(55);
       break;
     default:
-      jj_la1[38] = jj_gen;
+      jj_la1[45] = jj_gen;
       ;
     }
   }
@@ -964,7 +1663,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[39] = jj_gen;
+        jj_la1[46] = jj_gen;
         break label_6;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -996,7 +1695,7 @@ public class Robot implements RobotConstants {
             ;
             break;
           default:
-            jj_la1[40] = jj_gen;
+            jj_la1[47] = jj_gen;
             break label_7;
           }
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1007,7 +1706,7 @@ public class Robot implements RobotConstants {
             jj_consume_token(NAME);
             break;
           default:
-            jj_la1[41] = jj_gen;
+            jj_la1[48] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
@@ -1016,13 +1715,13 @@ public class Robot implements RobotConstants {
             jj_consume_token(53);
             break;
           default:
-            jj_la1[42] = jj_gen;
+            jj_la1[49] = jj_gen;
             ;
           }
         }
         break;
       default:
-        jj_la1[43] = jj_gen;
+        jj_la1[50] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1031,12 +1730,15 @@ public class Robot implements RobotConstants {
         jj_consume_token(55);
         break;
       default:
-        jj_la1[44] = jj_gen;
+        jj_la1[51] = jj_gen;
         ;
       }
     }
     jj_consume_token(57);
   }
+
+// ---------------------------------------------------------------------------------------
+
 
         /**
 	 * Unsigned decimal number
@@ -1067,7 +1769,7 @@ public class Robot implements RobotConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[45];
+  final private int[] jj_la1 = new int[52];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1075,10 +1777,10 @@ public class Robot implements RobotConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1fe0,0x1fe1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x40,0x0,0x0,0xff81a0,0x0,0x0,0x0,0x0,0x40,0x40,0xc0000000,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x0,0x29ff81a0,0x0,0x0,0x0,0x29ff81a0,0x0,};
+      jj_la1_0 = new int[] {0x1fe0,0x1fe1,0xff81a0,0xc0000000,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x0,0x29ff81a0,0x0,0x0,0x0,0x29ff81a0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x24000,0x24000,0x24000,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x1c0,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x3c00,0x0,0x18000,0x18000,0x3c00,0x3c00,0x1c0,0x1c0,0x381f,0x18000,0x18000,0x280,0x20000,0x200000,0x20000,0x200000,0x20000,0x0,0x0,0x1000000,0x0,0x800000,0x20000,0x24000,0x24000,0x200000,0x20000,0x800000,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x3f,0x18000,0x18000,0x24000,0x24000,0x24000,0x280,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x1c0,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x3c00,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x3c00,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x1c0,0x20000,0x200000,0x20000,0x200000,0x20000,0x0,0x0,0x1000000,0x0,0x800000,0x20000,0x24000,0x24000,0x200000,0x20000,0x800000,};
    }
 
   /** Constructor with InputStream. */
@@ -1092,7 +1794,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 45; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1106,7 +1808,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 45; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1116,7 +1818,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 45; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1126,7 +1828,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 45; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1135,7 +1837,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 45; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1144,7 +1846,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 45; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1200,7 +1902,7 @@ public class Robot implements RobotConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 45; i++) {
+    for (int i = 0; i < 52; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
