@@ -179,57 +179,48 @@ public class Robot implements RobotConstants {
     }
   }
 
-  final public boolean conditions() throws ParseException {
+  final public Boolean conditions() throws ParseException {
           Token name = new Token();
                 int num = 0;
                 boolean bool;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case FACING:
       bool = facing();
+                           {if (true) return bool;}
       break;
     case CANPUT:
       bool = canPut();
+                           {if (true) return bool;}
       break;
     case CANPICK:
       bool = canPick();
+                            {if (true) return bool;}
       break;
     case CANMOVEINDIR:
       bool = canMoveInDir();
+                                 {if (true) return bool;}
       break;
     case CANJUMPINDIR:
       bool = canJumpInDir();
+                                 {if (true) return bool;}
       break;
     case CANMOVETOTHE:
       bool = canMoveToThe();
+                                 {if (true) return bool;}
       break;
     case CANJUMPTOTHE:
       bool = canJumpToThe();
+                                 {if (true) return bool;}
       break;
     case NOT:
       bool = conditionNot();
-         {if (true) return bool;}
+                                 {if (true) return bool;}
       break;
     default:
       jj_la1[3] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-    throw new Error("Missing return statement in function");
-  }
-
-  final public boolean conditionNot() throws ParseException {
-          boolean cond;
-    jj_consume_token(NOT);
-    jj_consume_token(54);
-    cond = conditions();
-          if(ejecutar == true) {
-
-            if(cond == true) {
-              {if (true) return false;}
-            } else {
-              {if (true) return true;}
-            }
-          }
     throw new Error("Missing return statement in function");
   }
 
@@ -875,7 +866,7 @@ public class Robot implements RobotConstants {
 
 
 // ------------------------------METODOS DE CONDICIONES-----------------------------------
-  final public boolean facing() throws ParseException {
+  final public Boolean facing() throws ParseException {
           Token dir = new Token();
     jj_consume_token(FACING);
     jj_consume_token(54);
@@ -907,12 +898,13 @@ public class Robot implements RobotConstants {
                         else if(strDir.equals("EAST")) facingDir = 2;
                         else if(strDir.equals("WEST")) facingDir = 3;
 
+
                         {if (true) return (facing == facingDir);}
-             }
+             } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
-  final public boolean canPut() throws ParseException {
+  final public Boolean canPut() throws ParseException {
           int num = 0;
           Token name = new Token();
           Token obj = new Token();
@@ -966,11 +958,11 @@ public class Robot implements RobotConstants {
                 } else {if (true) return false;}
               }
 
-            }
+            } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
-  final public boolean canPick() throws ParseException {
+  final public Boolean canPick() throws ParseException {
           int num = 0;
           Token name = new Token();
           Token obj = new Token();
@@ -1024,11 +1016,11 @@ public class Robot implements RobotConstants {
                 } else {if (true) return false;}
               }
 
-            }
+            } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
-  final public boolean canMoveInDir() throws ParseException {
+  final public Boolean canMoveInDir() throws ParseException {
           int num = 0;
           Token name = new Token();
           Token dir = new Token();
@@ -1075,7 +1067,7 @@ public class Robot implements RobotConstants {
                   {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
                 }
 
-                if(strDir == "NORTH") {
+                if(strDir.equals("NORTH")) {
                   try {
                     world.moveVertically((-num), false);
                     world.moveVertically(num, false);
@@ -1085,7 +1077,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "SOUTH") {
+                else if(strDir.equals("SOUTH")) {
                   try {
                     world.moveVertically(num, false);
                     world.moveVertically((-num), false);
@@ -1095,30 +1087,32 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "EAST") {
+                else if(strDir.equals("EAST")) {
                   try {
                     world.moveHorizontally(num, false);
                     world.moveHorizontally((-num), false);
                     {if (true) return true;}
                   } catch (Exception e) {
+
                     {if (true) return false;}
                   }
                 }
 
-                else if(strDir == "WEST") {
+                else if(strDir.equals("WEST")) {
                   try {
                     world.moveHorizontally((-num), false);
                     world.moveHorizontally(num, false);
                     {if (true) return true;}
                   } catch (Exception e) {
+
                     {if (true) return false;}
                   }
                 }
-          }
+          } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
-  final public boolean canJumpInDir() throws ParseException {
+  final public Boolean canJumpInDir() throws ParseException {
           int num = 0;
           Token name = new Token();
           Token dir = new Token();
@@ -1165,7 +1159,7 @@ public class Robot implements RobotConstants {
                   {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
                 }
 
-                if(strDir == "NORTH") {
+                if(strDir.equals("NORTH")) {
                   try {
                     world.moveVertically((-num), true);
                     world.moveVertically(num, true);
@@ -1175,7 +1169,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "SOUTH") {
+                else if(strDir.equals("SOUTH")) {
                   try {
                     world.moveVertically(num, true);
                     world.moveVertically((-num), true);
@@ -1185,7 +1179,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "EAST") {
+                else if(strDir.equals("EAST")) {
                   try {
                     world.moveHorizontally(num, true);
                     world.moveHorizontally((-num), true);
@@ -1195,7 +1189,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "WEST") {
+                else if(strDir.equals("WEST")) {
                   try {
                     world.moveHorizontally((-num), true);
                     world.moveHorizontally(num, true);
@@ -1204,11 +1198,11 @@ public class Robot implements RobotConstants {
                     {if (true) return false;}
                   }
                 }
-          }
+          } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
-  final public boolean canMoveToThe() throws ParseException {
+  final public Boolean canMoveToThe() throws ParseException {
           int num = 0;
           Token name = new Token();
           Token dir = new Token();
@@ -1255,7 +1249,7 @@ public class Robot implements RobotConstants {
                   {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
                 }
 
-                if(strDir == "FRONT") {
+                if(strDir.equals("FRONT")) {
                   try {
                     world.moveVertically((-num), false);
                     world.moveVertically(num, false);
@@ -1265,7 +1259,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "BACK") {
+                else if(strDir.equals("BACK")) {
                   try {
                     world.moveVertically(num, false);
                     world.moveVertically((-num), false);
@@ -1275,7 +1269,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "RIGHT") {
+                else if(strDir.equals("RIGHT")) {
                   try {
                     world.moveHorizontally(num, false);
                     world.moveHorizontally((-num), false);
@@ -1285,7 +1279,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "LEFT") {
+                else if(strDir.equals("LEFT")) {
                   try {
                     world.moveHorizontally((-num), false);
                     world.moveHorizontally(num, false);
@@ -1294,11 +1288,11 @@ public class Robot implements RobotConstants {
                     {if (true) return false;}
                   }
                 }
-          }
+          } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
-  final public boolean canJumpToThe() throws ParseException {
+  final public Boolean canJumpToThe() throws ParseException {
           int num = 0;
           Token name = new Token();
           Token dir = new Token();
@@ -1345,7 +1339,7 @@ public class Robot implements RobotConstants {
                   {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
                 }
 
-                if(strDir == "FRONT") {
+                if(strDir.equals("FRONT")) {
                   try {
                     world.moveVertically((-num), true);
                     world.moveVertically(num, true);
@@ -1355,7 +1349,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "BACK") {
+                else if(strDir.equals("BACK")) {
                   try {
                     world.moveVertically(num, true);
                     world.moveVertically((-num), true);
@@ -1365,7 +1359,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "RIGHT") {
+                else if(strDir.equals("RIGHT")) {
                   try {
                     world.moveHorizontally(num, true);
                     world.moveHorizontally((-num), true);
@@ -1375,7 +1369,7 @@ public class Robot implements RobotConstants {
                   }
                 }
 
-                else if(strDir == "LEFT") {
+                else if(strDir.equals("LEFT")) {
                   try {
                     world.moveHorizontally((-num), true);
                     world.moveHorizontally(num, true);
@@ -1384,7 +1378,23 @@ public class Robot implements RobotConstants {
                     {if (true) return false;}
                   }
                 }
-          }
+          } else {if (true) return false;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public boolean conditionNot() throws ParseException {
+          boolean cond;
+    jj_consume_token(NOT);
+    jj_consume_token(54);
+    cond = conditions();
+          if(ejecutar == true) {
+
+            if(cond == true) {
+              {if (true) return false;}
+            } else {
+              {if (true) return true;}
+            }
+          } else {if (true) return false;}
     throw new Error("Missing return statement in function");
   }
 
@@ -1402,11 +1412,185 @@ public class Robot implements RobotConstants {
             if(cond) {
             instructions();
             }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case MOVE:
+    case PUT:
+    case PICK:
+    case ASSIGNTO:
+    case GOTO:
+    case TURN:
+    case FACE:
+    case MOVETOTHE:
+    case MOVEINDIR:
+    case JUMPTOTHE:
+    case JUMPINDIR:
+    case NOP:
+    case IF:
+    case WHILE:
+    case REPEAT:
+    case 56:
+      instructions();
+      break;
+    default:
+      jj_la1[36] = jj_gen;
+      ;
+    }
     jj_consume_token(ELSE);
     jj_consume_token(54);
               if(!cond) {
               instructions();
               }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case MOVE:
+    case PUT:
+    case PICK:
+    case ASSIGNTO:
+    case GOTO:
+    case TURN:
+    case FACE:
+    case MOVETOTHE:
+    case MOVEINDIR:
+    case JUMPTOTHE:
+    case JUMPINDIR:
+    case NOP:
+    case IF:
+    case WHILE:
+    case REPEAT:
+    case 56:
+      instructions();
+      break;
+    default:
+      jj_la1[37] = jj_gen;
+      ;
+    }
+  }
+
+  final public void loop() throws ParseException {
+          boolean cond;
+    jj_consume_token(WHILE);
+    jj_consume_token(54);
+                         Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);
+    cond = conditions();
+    jj_consume_token(DO);
+    jj_consume_token(54);
+    loop2(cond, t10, t11, t12, t13, t14, t15);
+  }
+
+//	void loop3():
+//	{
+//	  boolean cond;
+//	  boolean cond;
+//	}
+//	{
+//	  < WHILE > ":" {Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);} cond = conditions() < DO > ":" loop2(cond, t10, t11, t12, t13, t14, t15)
+//	}
+//
+//	void loop4():
+//	{
+//	  boolean cond;
+//	}
+//	{
+//	  < WHILE > ":" cond = conditions() < DO > ":" instructions()
+//	}
+  final public void loop2(boolean cond, Token t10, Token t11, Token t12, Token t13, Token t14, Token t15) throws ParseException {
+                Token t0, t1, t2, t3, t4, t5;
+                t0 = getToken(0);
+                t1 = getToken(1);
+                t2 = getToken(2);
+                t3 = getToken(3);
+                t4 = getToken(4);
+                t5 = getToken(5);
+
+
+                while(cond) {
+
+                        token = t10;
+                  token.next = t11;
+                  token.next.next = t12;
+                  token.next.next.next = t13;
+                  token.next.next.next.next = t14;
+                  token.next.next.next.next.next = t15;
+
+                        cond = conditions();
+
+                        token = t0;
+                  token.next = t1;
+                  token.next.next = t2;
+                  token.next.next.next = t3;
+                  token.next.next.next.next = t4;
+                  token.next.next.next.next.next = t5;
+
+                  if(cond==false) {
+                    break;
+                  } else {
+                    instructions();
+
+                  }
+
+                  }
+  }
+
+  final public void repeatTimes() throws ParseException {
+          int num = 0;
+          Token name = new Token();
+    jj_consume_token(REPEAT);
+    jj_consume_token(54);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case NUM:
+      num = num();
+      break;
+    case NAME:
+      name = jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[38] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+          if(name.image != null && mapaVariables.containsKey(name.image)) {
+                  num = mapaVariables.get(name.image);
+                } else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+                  {if (true) throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");}
+                }
+    repeatBlock(num);
+  }
+
+  final public void repeatBlock(int num) throws ParseException {
+            Token t0, t1, t2, t3, t4, t5, t6, t7, t8;
+                t0 = getToken(0);
+                t1 = getToken(1);
+                t2 = getToken(2);
+                t3 = getToken(3);
+                t4 = getToken(4);
+                t5 = getToken(5);
+                t6 = getToken(6);
+                t7 = getToken(7);
+                t8 = getToken(8);
+
+                System.out.println(t0);
+                System.out.println(t1);
+                System.out.println(t2);
+                System.out.println(t3);
+                System.out.println(t4);
+                System.out.println(t5);
+                System.out.println(t6);
+                System.out.println(t7);
+                System.out.println(t8);
+
+                for(int i = 0; i<num; i++) {
+
+                  token = t0;
+                  token.next = t1;
+                  token.next.next = t2;
+                  token.next.next.next = t3;
+                  token.next.next.next.next = t4;
+                  token.next.next.next.next.next = t5;
+                  token.next.next.next.next.next.next = t6;
+                  token.next.next.next.next.next.next.next = t7;
+                  token.next.next.next.next.next.next.next.next = t8;
+                  instructions();
+//		  System.out.println(i);
+                }
   }
 
 //---------------------------------------------------------------------------------------
@@ -1437,7 +1621,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[36] = jj_gen;
+        jj_la1[39] = jj_gen;
         break label_1;
       }
       var = jj_consume_token(NAME);
@@ -1446,7 +1630,7 @@ public class Robot implements RobotConstants {
         jj_consume_token(53);
         break;
       default:
-        jj_la1[37] = jj_gen;
+        jj_la1[40] = jj_gen;
         ;
       }
                                              listaVariables.add(var.image);
@@ -1462,7 +1646,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[38] = jj_gen;
+        jj_la1[41] = jj_gen;
         break label_2;
       }
       jj_consume_token(NAME);
@@ -1471,7 +1655,7 @@ public class Robot implements RobotConstants {
         jj_consume_token(53);
         break;
       default:
-        jj_la1[39] = jj_gen;
+        jj_la1[42] = jj_gen;
         ;
       }
     }
@@ -1487,7 +1671,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[40] = jj_gen;
+        jj_la1[43] = jj_gen;
         break label_3;
       }
       procdef();
@@ -1534,7 +1718,7 @@ public class Robot implements RobotConstants {
           ;
           break;
         default:
-          jj_la1[41] = jj_gen;
+          jj_la1[44] = jj_gen;
           break label_4;
         }
       }
@@ -1577,13 +1761,13 @@ public class Robot implements RobotConstants {
           ;
           break;
         default:
-          jj_la1[42] = jj_gen;
+          jj_la1[45] = jj_gen;
           break label_5;
         }
       }
       break;
     default:
-      jj_la1[43] = jj_gen;
+      jj_la1[46] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1609,21 +1793,13 @@ public class Robot implements RobotConstants {
       conditional();
       break;
     case WHILE:
-      jj_consume_token(WHILE);
-      jj_consume_token(54);
-      conditions();
-      jj_consume_token(DO);
-      jj_consume_token(54);
-      instructions();
+      loop();
       break;
     case REPEAT:
-      jj_consume_token(REPEAT);
-      jj_consume_token(54);
-      jj_consume_token(NUM);
-      instructions();
+      repeatTimes();
       break;
     default:
-      jj_la1[44] = jj_gen;
+      jj_la1[47] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1632,7 +1808,7 @@ public class Robot implements RobotConstants {
       jj_consume_token(55);
       break;
     default:
-      jj_la1[45] = jj_gen;
+      jj_la1[48] = jj_gen;
       ;
     }
   }
@@ -1663,7 +1839,7 @@ public class Robot implements RobotConstants {
         ;
         break;
       default:
-        jj_la1[46] = jj_gen;
+        jj_la1[49] = jj_gen;
         break label_6;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1695,7 +1871,7 @@ public class Robot implements RobotConstants {
             ;
             break;
           default:
-            jj_la1[47] = jj_gen;
+            jj_la1[50] = jj_gen;
             break label_7;
           }
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1706,7 +1882,7 @@ public class Robot implements RobotConstants {
             jj_consume_token(NAME);
             break;
           default:
-            jj_la1[48] = jj_gen;
+            jj_la1[51] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
@@ -1715,13 +1891,13 @@ public class Robot implements RobotConstants {
             jj_consume_token(53);
             break;
           default:
-            jj_la1[49] = jj_gen;
+            jj_la1[52] = jj_gen;
             ;
           }
         }
         break;
       default:
-        jj_la1[50] = jj_gen;
+        jj_la1[53] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1730,7 +1906,7 @@ public class Robot implements RobotConstants {
         jj_consume_token(55);
         break;
       default:
-        jj_la1[51] = jj_gen;
+        jj_la1[54] = jj_gen;
         ;
       }
     }
@@ -1769,7 +1945,7 @@ public class Robot implements RobotConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[52];
+  final private int[] jj_la1 = new int[55];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1777,10 +1953,10 @@ public class Robot implements RobotConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1fe0,0x1fe1,0xff81a0,0xc0000000,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x0,0x29ff81a0,0x0,0x0,0x0,0x29ff81a0,0x0,};
+      jj_la1_0 = new int[] {0x1fe0,0x1fe1,0xff81a0,0xc0000000,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x40,0x29ff81a0,0x29ff81a0,0x0,0x0,0x0,0x0,0x0,0x0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x29ff81a0,0x0,0x29ff81a0,0x0,0x0,0x0,0x29ff81a0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x3f,0x18000,0x18000,0x24000,0x24000,0x24000,0x280,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x1c0,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x3c00,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x3c00,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x1c0,0x20000,0x200000,0x20000,0x200000,0x20000,0x0,0x0,0x1000000,0x0,0x800000,0x20000,0x24000,0x24000,0x200000,0x20000,0x800000,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x3f,0x18000,0x18000,0x24000,0x24000,0x24000,0x280,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x1c0,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x3c00,0x3c00,0x24000,0x18000,0x24000,0x18000,0x24000,0x3c00,0x24000,0x3c00,0x24000,0x1c0,0x24000,0x1c0,0x1000000,0x1000000,0x24000,0x20000,0x200000,0x20000,0x200000,0x20000,0x0,0x0,0x1000000,0x0,0x800000,0x20000,0x24000,0x24000,0x200000,0x20000,0x800000,};
    }
 
   /** Constructor with InputStream. */
@@ -1794,7 +1970,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 55; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1808,7 +1984,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 55; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1818,7 +1994,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 55; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1828,7 +2004,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 55; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1837,7 +2013,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 55; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1846,7 +2022,7 @@ public class Robot implements RobotConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 52; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 55; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1902,7 +2078,7 @@ public class Robot implements RobotConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 52; i++) {
+    for (int i = 0; i < 55; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

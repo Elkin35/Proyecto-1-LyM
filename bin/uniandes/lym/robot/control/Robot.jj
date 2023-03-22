@@ -223,45 +223,23 @@ TOKEN: //Tipos de datos
 	| < NOP > ":"
 	}
 
-	boolean conditions():    //----> Falta probar que las condiciones funcionen
+	Boolean conditions():    //----> Falta probar que las condiciones funcionen
 	{
 	  Token name = new Token();
 		int num = 0;
 		boolean bool;
 	  }
 	{
-	  bool = facing() // < FACING > ":" (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-	| bool = canPut() // < CANPUT > ":" num() "," (< BALLOONS >|< CHIPS >)
-	| bool = canPick() // < CANPICK > ":" (num = num()| name = < NAME >) "," (< BALLOONS >|< CHIPS >)
-	| bool = canMoveInDir() // < CANMOVEINDIR > ":" (num = num()| name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-	| bool = canJumpInDir() // < CANJUMPINDIR > ":" (num = num()| name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
-	| bool = canMoveToThe() // < CANMOVETOTHE > ":" (num = num()| name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
-	| bool = canJumpToThe() // < CANJUMPTOTHE > ":" (num = num()| name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
-	| bool = conditionNot() //< NOT > ":" (conditions())    ---> No se si funciona asi
+	  bool = facing() {return bool;}// < FACING > ":" (< NORTH >|< SOUTH >|< EAST >|< WEST >) 
+	| bool = canPut() {return bool;}// < CANPUT > ":" num() "," (< BALLOONS >|< CHIPS >)
+	| bool = canPick() {return bool;}// < CANPICK > ":" (num = num()| name = < NAME >) "," (< BALLOONS >|< CHIPS >)
+	| bool = canMoveInDir() {return bool;}// < CANMOVEINDIR > ":" (num = num()| name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+	| bool = canJumpInDir() {return bool;}// < CANJUMPINDIR > ":" (num = num()| name = < NAME >) "," (< NORTH >|< SOUTH >|< EAST >|< WEST >)
+	| bool = canMoveToThe() {return bool;}// < CANMOVETOTHE > ":" (num = num()| name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
+	| bool = canJumpToThe() {return bool;}// < CANJUMPTOTHE > ":" (num = num()| name = < NAME >) "," (< FRONT >|< RIGHT >|< LEFT >|< BACK >)
+	| bool = conditionNot() {return bool;}//< NOT > ":" (conditions())    ---> No se si funciona asi
 
-	{return bool;}
 	}
-
-	boolean conditionNot():
-	{
-	  boolean cond;
-	}
-
-	{
-	  < NOT > ":" cond = conditions()
-	  {
-	  if(ejecutar == true) {
-
-	    if(cond == true) {
-	      return false;
-	    } else {
-	      return true;
-	    }
-	  }
-	}
-	
-	}
-
 
 // ----------------------------METODOS DE COMANDOS----------------------------
 
@@ -744,7 +722,7 @@ TOKEN: //Tipos de datos
 
 // ------------------------------METODOS DE CONDICIONES-----------------------------------
 
-	boolean facing():
+	Boolean facing():
 	{
 	  Token dir = new Token();
 	}
@@ -763,14 +741,15 @@ TOKEN: //Tipos de datos
 			else if(strDir.equals("EAST")) facingDir = 2;
 			else if(strDir.equals("WEST")) facingDir = 3;
 
+
 			return (facing == facingDir);
-	     }
+	     } else return false;
 	   } 
 
 	}
 
 
-	boolean canPut():
+	Boolean canPut():
 	{
 	  int num = 0;
 	  Token name = new Token();
@@ -805,13 +784,13 @@ TOKEN: //Tipos de datos
 	        } else return false;
 	      }
 	      
-	    }
+	    } else return false;
 	  }
 	  
 	}
 
 
-	boolean canPick():
+	Boolean canPick():
 	{
 	  int num = 0;
 	  Token name = new Token();
@@ -846,14 +825,14 @@ TOKEN: //Tipos de datos
 	        } else return false;
 	      }
 	      
-	    }
+	    } else return false;
 	  }
 	  
 	}
 
 
 
-	boolean canMoveInDir():
+	Boolean canMoveInDir():
 	{
 	  int num = 0;
 	  Token name = new Token();
@@ -874,7 +853,7 @@ TOKEN: //Tipos de datos
 		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
 		}
 
-		if(strDir == "NORTH") {
+		if(strDir.equals("NORTH")) {
 		  try {
 		    world.moveVertically((-num), false);
 		    world.moveVertically(num, false);
@@ -884,7 +863,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "SOUTH") {
+		else if(strDir.equals("SOUTH")) {
 		  try {
 		    world.moveVertically(num, false);
 		    world.moveVertically((-num), false);
@@ -894,33 +873,35 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "EAST") {
+		else if(strDir.equals("EAST")) {
 		  try {
 		    world.moveHorizontally(num, false);
 		    world.moveHorizontally((-num), false);
 		    return true;
 		  } catch (Exception e) {
+
 		    return false;
 		  }
 		}
 
-		else if(strDir == "WEST") {
+		else if(strDir.equals("WEST")) {
 		  try {
 		    world.moveHorizontally((-num), false);
 		    world.moveHorizontally(num, false);
 		    return true;
 		  } catch (Exception e) {
+
 		    return false;
 		  }
 		}
-	  }
+	  } else return false;
 	}
 	
 	}
 
 
 
-	boolean canJumpInDir():
+	Boolean canJumpInDir():
 	{
 	  int num = 0;
 	  Token name = new Token();
@@ -941,7 +922,7 @@ TOKEN: //Tipos de datos
 		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
 		}
 
-		if(strDir == "NORTH") {
+		if(strDir.equals("NORTH")) {
 		  try {
 		    world.moveVertically((-num), true);
 		    world.moveVertically(num, true);
@@ -951,7 +932,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "SOUTH") {
+		else if(strDir.equals("SOUTH")) {
 		  try {
 		    world.moveVertically(num, true);
 		    world.moveVertically((-num), true);
@@ -961,7 +942,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "EAST") {
+		else if(strDir.equals("EAST")) {
 		  try {
 		    world.moveHorizontally(num, true);
 		    world.moveHorizontally((-num), true);
@@ -971,7 +952,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "WEST") {
+		else if(strDir.equals("WEST")) {
 		  try {
 		    world.moveHorizontally((-num), true);
 		    world.moveHorizontally(num, true);
@@ -980,13 +961,13 @@ TOKEN: //Tipos de datos
 		    return false;
 		  }
 		}
-	  }
+	  } else return false;
 	}
 	
 	}
 
 
-	boolean canMoveToThe():
+	Boolean canMoveToThe():
 	{
 	  int num = 0;
 	  Token name = new Token();
@@ -997,6 +978,7 @@ TOKEN: //Tipos de datos
 		< CANMOVETOTHE > ":" (num = num()| name = < NAME >) "," ( dir = < FRONT >| dir = < RIGHT >| dir = < LEFT >| dir = < BACK >)
 
 		{
+		  
 	  if(ejecutar == true) {
 
 	    String strDir = (dir.image).toUpperCase();
@@ -1007,7 +989,7 @@ TOKEN: //Tipos de datos
 		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
 		}
 
-		if(strDir == "FRONT") {
+		if(strDir.equals("FRONT")) {
 		  try {
 		    world.moveVertically((-num), false);
 		    world.moveVertically(num, false);
@@ -1017,7 +999,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "BACK") {
+		else if(strDir.equals("BACK")) {
 		  try {
 		    world.moveVertically(num, false);
 		    world.moveVertically((-num), false);
@@ -1027,7 +1009,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "RIGHT") {
+		else if(strDir.equals("RIGHT")) {
 		  try {
 		    world.moveHorizontally(num, false);
 		    world.moveHorizontally((-num), false);
@@ -1037,7 +1019,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "LEFT") {
+		else if(strDir.equals("LEFT")) {
 		  try {
 		    world.moveHorizontally((-num), false);
 		    world.moveHorizontally(num, false);
@@ -1046,14 +1028,14 @@ TOKEN: //Tipos de datos
 		    return false;
 		  }
 		}
-	  }
+	  } else return false;
 	}
 		
 	}
 
 
 
-	boolean canJumpToThe():
+	Boolean canJumpToThe():
 	{
 	  int num = 0;
 	  Token name = new Token();
@@ -1074,7 +1056,7 @@ TOKEN: //Tipos de datos
 		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
 		}
 
-		if(strDir == "FRONT") {
+		if(strDir.equals("FRONT")) {
 		  try {
 		    world.moveVertically((-num), true);
 		    world.moveVertically(num, true);
@@ -1084,7 +1066,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "BACK") {
+		else if(strDir.equals("BACK")) {
 		  try {
 		    world.moveVertically(num, true);
 		    world.moveVertically((-num), true);
@@ -1094,7 +1076,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "RIGHT") {
+		else if(strDir.equals("RIGHT")) {
 		  try {
 		    world.moveHorizontally(num, true);
 		    world.moveHorizontally((-num), true);
@@ -1104,7 +1086,7 @@ TOKEN: //Tipos de datos
 		  }
 		}
 
-		else if(strDir == "LEFT") {
+		else if(strDir.equals("LEFT")) {
 		  try {
 		    world.moveHorizontally((-num), true);
 		    world.moveHorizontally(num, true);
@@ -1113,9 +1095,31 @@ TOKEN: //Tipos de datos
 		    return false;
 		  }
 		}
-	  }
+	  } else return false;
 	}
 		
+	}
+
+
+
+	boolean conditionNot():
+	{
+	  boolean cond;
+	}
+
+	{
+	  < NOT > ":" cond = conditions()
+	  {
+	  if(ejecutar == true) {
+
+	    if(cond == true) {
+	      return false;
+	    } else {
+	      return true;
+	    }
+	  } else return false;
+	}
+	
 	}
 
 //---------------------------------------------------------------------------------------
@@ -1123,29 +1127,170 @@ TOKEN: //Tipos de datos
 
 //--------------------------------ESTRUCTURAS DE CONTROL---------------------------------
 
-	void conditional(): //      ---> probar esto
+	void conditional(): 
 	{
 	  boolean cond;
 	}
 	
 	{
+	  
 	  (< IF > ":" cond = conditions() < THEN > ":" {
 	    
 	    if(cond) {
 	    instructions();
-	    }
-	  }
+	    } 
+	  } (instructions())?
 	    < ELSE > ":" {
 	      if(!cond) { 
 	      instructions();
 	      }
-	    } )
+	    } (instructions())?)
+
 	}
 
 
+	void loop():
+	{
+	  boolean cond;
+	}
 	
+	{
+	  < WHILE > ":" {Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);} cond = conditions() < DO > ":" loop2(cond, t10, t11, t12, t13, t14, t15)
+//		{
+//		  if(ejecutar == true) {
+//		    loop3();
+//		  } else loop4();
+//		}
+	}
 
 
+//	void loop3():
+//	{
+//	  boolean cond;
+//	  boolean cond;
+//	}
+//	{
+//	  < WHILE > ":" {Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);} cond = conditions() < DO > ":" loop2(cond, t10, t11, t12, t13, t14, t15)
+//	}
+//
+//	void loop4():
+//	{
+//	  boolean cond;
+//	}
+//	{
+//	  < WHILE > ":" cond = conditions() < DO > ":" instructions()
+//	}
+
+
+	void loop2(boolean cond, Token t10, Token t11, Token t12, Token t13, Token t14, Token t15):
+	{
+	}
+	{
+	  {
+		Token t0, t1, t2, t3, t4, t5;
+		t0 = getToken(0);
+		t1 = getToken(1);
+		t2 = getToken(2);
+		t3 = getToken(3);
+		t4 = getToken(4);
+		t5 = getToken(5);
+
+		  
+		while(cond) {
+		  
+			token = t10;
+		  token.next = t11;
+		  token.next.next = t12;
+		  token.next.next.next = t13;
+		  token.next.next.next.next = t14;
+		  token.next.next.next.next.next = t15;
+
+			cond = conditions();
+
+			token = t0;
+		  token.next = t1;
+		  token.next.next = t2;
+		  token.next.next.next = t3;
+		  token.next.next.next.next = t4;
+		  token.next.next.next.next.next = t5;
+
+		  if(cond==false) {
+		    break;
+		  } else {
+		    instructions();
+
+		  }
+		  
+		  }
+		}
+		
+		}
+
+
+
+
+	void repeatTimes():
+	{
+	  int num = 0;
+	  Token name = new Token();
+	}
+	{
+	  < REPEAT > ":" (num = num()| name = < NAME >)
+	{
+	  if(name.image != null && mapaVariables.containsKey(name.image)) {
+		  num = mapaVariables.get(name.image);
+		} else if (name.image != null && !mapaVariables.containsKey(name.image)) {
+		  throw new Error("La variable "+name.image+" debe ser declarada antes de usarse.");
+		}
+	}
+	  repeatBlock(num)
+	}
+
+
+	void repeatBlock(int num):
+	{
+	}
+	{
+	  {
+	    Token t0, t1, t2, t3, t4, t5, t6, t7, t8;
+		t0 = getToken(0);
+		t1 = getToken(1);
+		t2 = getToken(2);
+		t3 = getToken(3);
+		t4 = getToken(4);
+		t5 = getToken(5);
+		t6 = getToken(6);
+		t7 = getToken(7);
+		t8 = getToken(8);
+
+		System.out.println(t0);
+		System.out.println(t1);
+		System.out.println(t2);
+		System.out.println(t3);
+		System.out.println(t4);
+		System.out.println(t5);
+		System.out.println(t6);
+		System.out.println(t7);
+		System.out.println(t8);
+
+		for(int i = 0; i<num; i++) {
+		  
+		  token = t0;
+		  token.next = t1;
+		  token.next.next = t2;
+		  token.next.next.next = t3;
+		  token.next.next.next.next = t4;
+		  token.next.next.next.next.next = t5;
+		  token.next.next.next.next.next.next = t6;
+		  token.next.next.next.next.next.next.next = t7;
+		  token.next.next.next.next.next.next.next.next = t8;
+		  instructions();
+//		  System.out.println(i);
+		}
+
+
+	    }
+	}
 
 //---------------------------------------------------------------------------------------
 
@@ -1214,7 +1359,7 @@ TOKEN: //Tipos de datos
 	}
 	
 	{
- 	(("[")(instruction())+ ("]")) | (instruction())+
+ 	("[" (instruction())+ "]") | ((instruction())+)
 
 	}
 
@@ -1223,8 +1368,8 @@ TOKEN: //Tipos de datos
 	void instruction() :	
 	{}
 	{
- 	(command2() // | conditions()
-	| conditional() | (< WHILE > ":" conditions() < DO > ":" instructions()) | (< REPEAT > ":" < NUM > instructions())) (";")?
+ 	(command2()  /*| conditions()*/
+	| conditional() /*| (< WHILE > ":" conditions() < DO > ":" instructions())*/ |loop() /*| (< REPEAT > ":" < NUM > instructions())*/ | repeatTimes()) (";")?
 	}
 	
 	void inst():
