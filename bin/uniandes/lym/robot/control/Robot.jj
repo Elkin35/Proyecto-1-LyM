@@ -146,6 +146,7 @@ TOKEN: //Tipos de datos
   
 }
 
+
 // ----------------------------------PRODUCCIONES----------------------------------
 
 
@@ -223,7 +224,7 @@ TOKEN: //Tipos de datos
 	| < NOP > ":"
 	}
 
-	Boolean conditions():    //----> Falta probar que las condiciones funcionen
+	Boolean conditions():
 	{
 	  Token name = new Token();
 		int num = 0;
@@ -1144,7 +1145,7 @@ TOKEN: //Tipos de datos
 	      if(!cond) { 
 	      instructions();
 	      }
-	    } (instructions())?)
+	    } (LOOKAHEAD(2) instructions())?)
 
 	}
 
@@ -1155,31 +1156,9 @@ TOKEN: //Tipos de datos
 	}
 	
 	{
-	  < WHILE > ":" {Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);} cond = conditions() < DO > ":" loop2(cond, t10, t11, t12, t13, t14, t15)
-//		{
-//		  if(ejecutar == true) {
-//		    loop3();
-//		  } else loop4();
-//		}
+	  < WHILE > ":" {Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);} cond = conditions() { System.out.println(cond);} < DO > ":" loop2(cond, t10, t11, t12, t13, t14, t15)
 	}
 
-
-//	void loop3():
-//	{
-//	  boolean cond;
-//	  boolean cond;
-//	}
-//	{
-//	  < WHILE > ":" {Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);} cond = conditions() < DO > ":" loop2(cond, t10, t11, t12, t13, t14, t15)
-//	}
-//
-//	void loop4():
-//	{
-//	  boolean cond;
-//	}
-//	{
-//	  < WHILE > ":" cond = conditions() < DO > ":" instructions()
-//	}
 
 
 	void loop2(boolean cond, Token t10, Token t11, Token t12, Token t13, Token t14, Token t15):
@@ -1223,6 +1202,7 @@ TOKEN: //Tipos de datos
 		  
 		  }
 		}
+		(LOOKAHEAD(2) instructions())?
 		
 		}
 
@@ -1263,16 +1243,6 @@ TOKEN: //Tipos de datos
 		t7 = getToken(7);
 		t8 = getToken(8);
 
-		System.out.println(t0);
-		System.out.println(t1);
-		System.out.println(t2);
-		System.out.println(t3);
-		System.out.println(t4);
-		System.out.println(t5);
-		System.out.println(t6);
-		System.out.println(t7);
-		System.out.println(t8);
-
 		for(int i = 0; i<num; i++) {
 		  
 		  token = t0;
@@ -1285,7 +1255,6 @@ TOKEN: //Tipos de datos
 		  token.next.next.next.next.next.next.next = t7;
 		  token.next.next.next.next.next.next.next.next = t8;
 		  instructions();
-//		  System.out.println(i);
 		}
 
 
@@ -1307,7 +1276,7 @@ TOKEN: //Tipos de datos
   	}
 	}
 
-	
+
 
 	void robot() :	
 	{}
@@ -1353,30 +1322,56 @@ TOKEN: //Tipos de datos
  	"|" (listofnames()) "|"
 	}
 
-	void instructions() :	
-	{
-	
-	}
-	
-	{
- 	("[" (instruction())+ "]") | ((instruction())+)
+//	void instructions() :
+//	{
+//	
+//	}
+//	
+//	{
+// 	"[" (instruction())+ "]" | ((instruction())+)
+//
+//	}
 
+
+	void instructions() :
+	{
+	   // Código de la función
+	}
+	{
+	  
+	   "[" (instructionsAux()) "]"
+	   |
+	   (instructionsAux2())
 	}
 
+
+	void instructionsAux():
+	{
+	}
+	{
+	  (LOOKAHEAD(2) instruction())*
+	}
+
+	void instructionsAux2():
+	{
+	}
+	{
+	  ( LOOKAHEAD(2) instruction())+
+	}
 	
 
 	void instruction() :	
 	{}
 	{
- 	(command2()  /*| conditions()*/
-	| conditional() /*| (< WHILE > ":" conditions() < DO > ":" instructions())*/ |loop() /*| (< REPEAT > ":" < NUM > instructions())*/ | repeatTimes()) (";")?
+ 	(command2() | conditional() | loop() | repeatTimes()) (LOOKAHEAD(2) ";")?
 	}
+
 	
 	void inst():
 	{if(ejecutar == false) {
 	  ejecutar = true;} }
 	{
-	"[" ((instruction()| < NAME > ":" ((num()|< NAME >) (",")?)* ) (";")?)* "]"
+	"[" ((instruction()| < NAME > ":" (LOOKAHEAD(2)(num()|< NAME >) (",")?)* ) (";")?)* "]"
 	}
 
 // ---------------------------------------------------------------------------------------
