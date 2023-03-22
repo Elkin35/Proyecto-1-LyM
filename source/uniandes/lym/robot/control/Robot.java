@@ -1453,7 +1453,6 @@ public class Robot implements RobotConstants {
     jj_consume_token(54);
                          Token t10 = getToken(0); Token t11 = getToken(1); Token t12 = getToken(2); Token t13 = getToken(3); Token t14 = getToken(4); Token t15 = getToken(5);
     cond = conditions();
-                                                                                                                                                                                                      System.out.println(cond);
     jj_consume_token(DO);
     jj_consume_token(54);
     loop2(cond, t10, t11, t12, t13, t14, t15);
